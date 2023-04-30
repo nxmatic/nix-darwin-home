@@ -9,7 +9,9 @@
     ./dotfiles
     ./fzf.nix
     ./git.nix
+    ./gh.nix
     ./kitty.nix
+    ./password-store.nix
     ./nushell.nix
     ./nvim
     ./shell.nix
@@ -68,6 +70,7 @@
       findutils
       flyctl
       gawk
+      gh
       gnugrep
       gnupg
       gnused
@@ -90,6 +93,13 @@
       nixpkgs-fmt
       nodejs_latest
       parallel
+      passExtensions.pass-otp
+      #passExtensions.pass-tomb incompatible with darwin
+      passExtensions.pass-audit
+      passExtensions.pass-update
+      passExtensions.pass-import
+      passExtensions.pass-checkup
+      passExtensions.pass-genphrase
       poetry
       pre-commit
       # python with default packages
@@ -110,12 +120,13 @@
       stylua
       sysdo
       terraform
+      tig
       tree
       treefmt
       trivy
       vagrant
       yarn
-      yq-go
+      yq
     ];
   };
 
@@ -127,6 +138,8 @@
     dircolors.enable = true;
     go.enable = true;
     gpg.enable = true;
+    password-store.enable = true;
+    git.enable = true;
     htop.enable = true;
     jq.enable = true;
     less.enable = true;

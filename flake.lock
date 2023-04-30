@@ -9,13 +9,13 @@
       "locked": {
         "lastModified": 1682775526,
         "narHash": "sha256-FdtlYoWaIu8xP2kcaM9EvmEKkzbqsIHUNISxCvK2H8k=",
-        "owner": "kclejeune",
+        "owner": "nxmatic",
         "repo": "nix-darwin",
         "rev": "9fa0415a9663112265e47f99ddf4e38271825f0c",
         "type": "github"
       },
       "original": {
-        "owner": "kclejeune",
+        "owner": "nxmatic",
         "repo": "nix-darwin",
         "type": "github"
       }
