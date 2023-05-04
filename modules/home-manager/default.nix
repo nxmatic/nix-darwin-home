@@ -5,6 +5,7 @@
 }: {
   imports = [
     ./bat.nix
+    ./dircolors.nix
     ./direnv.nix
     ./dotfiles
     ./fzf.nix
@@ -13,7 +14,7 @@
     ./kitty.nix
     ./password-store.nix
     ./nushell.nix
-#    ./nvim
+    ./nvim
     ./shell.nix
     ./ssh.nix
     ./tldr.nix
@@ -41,7 +42,7 @@
       CLICOLOR = 1;
       LSCOLORS = "ExFxBxDxCxegedabagacad";
 #      KAGGLE_CONFIG_DIR = "${config.xdg.configHome}/kaggle";
-      # HOMEBREW_NO_AUTO_UPDATE = 1;
+      HOMEBREW_NO_AUTO_UPDATE = 1;
     };
     sessionPath = [
       "${config.home.homeDirectory}/.rd/bin"
@@ -69,12 +70,17 @@
       gnugrep
       gnupg
       gnused
-      google-cloud-sdk
+      (
+        google-cloud-sdk.withExtraComponents(
+          [ google-cloud-sdk.components.gke-gcloud-auth-plugin ]
+        )
+      )
       helm-docs
       helmfile
       httpie
       unstable.jdk11
       k9s
+      krew
       kubectl
       kubectx
       kubernetes-helm
@@ -132,20 +138,5 @@
       enable = true;
       path = "${config.home.homeDirectory}/.nixpkgs/modules/home-manager";
     };
-    dircolors.enable = true;
-    go.enable = true;
-    gpg.enable = true;
-    password-store.enable = true;
-    git.enable = true;
-    htop.enable = true;
-    jq.enable = true;
-    less.enable = true;
-    man.enable = true;
-    nix-index.enable = true;
-    pandoc.enable = true;
-    starship.enable = true;
-    yt-dlp.enable = true;
-    zathura.enable = true;
-    zoxide.enable = true;
   };
 }
