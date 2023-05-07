@@ -11,6 +11,7 @@
     ./fzf.nix
     ./git.nix
     ./gh.nix
+    ./keychain.nix
     ./kitty.nix
     ./password-store.nix
     ./nushell.nix
@@ -43,6 +44,10 @@
       LSCOLORS = "ExFxBxDxCxegedabagacad";
 #      KAGGLE_CONFIG_DIR = "${config.xdg.configHome}/kaggle";
       HOMEBREW_NO_AUTO_UPDATE = 1;
+      XDG_CACHE_HOME  = "$HOME/.cache";
+      XDG_CONFIG_HOME = "$HOME/.config";
+      XDG_DATA_HOME   = "$HOME/.local/share";
+      XDG_BIN_HOME    = "$HOME/.local/bin";
     };
     sessionPath = [
       "${config.home.homeDirectory}/.rd/bin"

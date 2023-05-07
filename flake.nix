@@ -33,6 +33,15 @@
     # shell stuff
     flake-utils.url = "github:numtide/flake-utils";
     treefmt-nix.url = "github:numtide/treefmt-nix";
+
+    # nvim git plugins
+    packer-nvim = {
+      type = "github";
+      owner = "wbthomason";
+      repo = "packer.nvim";
+      flake = false;
+    };
+
   };
 
   outputs = {
@@ -62,7 +71,7 @@
     mkDarwinConfig = {
       system ? "aarch64-darwin",
       nixpkgs ? inputs.nixpkgs,
-      baseModules ? [
+      baseModules ? [ 
         home-manager.darwinModules.home-manager
         ./modules/darwin
       ],
