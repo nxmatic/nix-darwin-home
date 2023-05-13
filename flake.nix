@@ -121,7 +121,7 @@
       arch,
       os,
       username ? "nxmatic",
-      profile ? "core",
+      profile ? "committed",
     }: {
       "${arch}-${os}" = {
         "${username}_${os}" =
@@ -156,20 +156,20 @@
     # // (mkChecks {
     #   arch = "x86_64";
     #   os = "linux";
-    #   profile = "core";
+    #   profile = "committed";
     # });
 
     darwinConfigurations = {
       "work@x86_64-darwin" = mkDarwinConfig {
         system = "x86_64-darwin";
         extraModules = [
-          ./profiles/work.nix
+          ./profiles/darwin/work.nix
         ];
       };
       "committed@x86_64-darwin" = mkDarwinConfig {
         system = "x86_64-darwin";
         extraModules = [
-          ./profiles/uncommitted.nix
+          ./profiles/darwin/committed.nix
         ];
       };
     };
@@ -200,7 +200,6 @@
         profile = "work";
         extraModules = [
           ./profiles/home-manager/work.nix
-          ./profiles/home-manager/committed
         ];
       };
       "committed@x86_64-darwin" = mkHomeConfig {
