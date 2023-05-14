@@ -86,7 +86,7 @@
       helm-docs
       helmfile
       httpie
-      unstable.jdk11
+      jdk11
       k9s
       krew
       kubectl
@@ -135,7 +135,7 @@
       trivy
       vagrant
       yarn
-      yq-go
+      unstable.yq-go
     ];
   };
 
