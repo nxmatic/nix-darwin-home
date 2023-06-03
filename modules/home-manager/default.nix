@@ -86,7 +86,7 @@
       helm-docs
       helmfile
       httpie
-      jdk11
+      jdk19
       k9s
       krew
       kubectl
