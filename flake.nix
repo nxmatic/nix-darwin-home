@@ -17,7 +17,6 @@
     # package repos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    devenv.url = "github:cachix/devenv/latest";
 
     # system management
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -25,10 +24,15 @@
       url = "github:nxmatic/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # home manager
     home-manager = {
       url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # devenv
+    devenv.url = "github:cachix/devenv/latest";
 
     # shell stuff
     flake-utils.url = "github:numtide/flake-utils";
