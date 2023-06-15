@@ -15,23 +15,6 @@ in {
         description = "Whether to enable the Syncthing service.";
       };
 
-      homeDir = mkOption {
-        type = types.nullOr types.path;
-        default = "~";
-        example = "/Users/nxmatic";
-        description = ''
-          the base location for the syncthing folder
-        '';
-      };
-
-      logDir = mkOption {
-        type = types.nullOr types.path;
-        default = "~/Library/Logs";
-        example = "~/Library/Logs";
-        description = ''
-          The logfile to use for the Syncthing service.
-        '';
-      };
     };
   };
 
@@ -44,8 +27,8 @@ in {
         KeepAlive = true;
         LowPriorityIO = true;
         ProcessType = "Background";
-        StandardOutPath = "${cfg.logDir}/Syncthing.log";
-        StandardErrorPath = "${cfg.logDir}/Syncthing-Errors.log";
+#        StandardOutPath = "~/.local/var/log/Syncthing.log"; # xdg data dir
+#        StandardErrorPath = "~/.local/var/log/Syncthing-Errors.log"; # xdg data dir
         EnvironmentVariables = {
           NIX_PATH = "nixpkgs=" + toString pkgs.path;
           STNORESTART = "1";

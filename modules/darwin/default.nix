@@ -8,6 +8,7 @@
     ./lorri.nix
     ./emacs.nix
     ./tailscale.nix
+    ./syncthing.nix
     #./display-manager.nix
   ];
 

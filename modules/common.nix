@@ -179,7 +179,10 @@
 
   services.tailscale = {
     enable = true;
-    #logDir = config.logDir or null; # Use the value of the logDir option, or null if it is not set
+  };
+
+  services.syncthing = {
+    enable = true;
   };
 
   fonts = {
