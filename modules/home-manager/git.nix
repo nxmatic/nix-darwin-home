@@ -18,6 +18,7 @@
       push.followTags = true;
       push.autoSetupRemote = true;
       rebase.autoStash = true;
+      url."git@github.com:".insteadOf = "https://github.com";
     };
     aliases = {
       fix = "commit --amend --no-edit";
