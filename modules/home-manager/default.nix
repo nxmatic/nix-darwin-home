@@ -63,6 +63,7 @@
       # awscli2
       age
       alejandra
+      bash
       cachix
       cb
       cirrus-cli
@@ -139,6 +140,7 @@
       yarn
       yamllint
       unstable.yq-go
+      zsh
     ];
   };
 
