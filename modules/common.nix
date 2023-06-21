@@ -151,7 +151,7 @@
       # keystore crypto
       gnupg
       pinentry
-#     pinentry-curses
+      pinentry-curses
 #     pinentry_mac
 
       oath-toolkit
