@@ -141,7 +141,6 @@
 
       # virtual env manager for coding
       direnv
-      lorri
 
       # container runtimes
       lima

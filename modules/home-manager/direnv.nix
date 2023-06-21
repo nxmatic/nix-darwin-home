@@ -2,7 +2,8 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
-
+    
+    enableBashIntegration = true;
     enableZshIntegration = true;
 
     stdlib = ''
@@ -19,5 +20,11 @@
       source_env_if_exists ''${BASH_SOURCE}~krew
       source_env_if_exists ''${BASH_SOURCE}~pass
     '';
+  };
+  programs.bash = {
+    enable = true;
+  };
+  programs.zsh = {
+    enable = true;
   };
 }
