@@ -148,6 +148,11 @@
       qemu
       docker-client
 
+      # docker sync
+      docker-sync
+      docker-compose
+      unison
+
       # keystore crypto
       gnupg
       pinentry
