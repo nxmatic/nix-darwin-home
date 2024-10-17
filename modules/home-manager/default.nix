@@ -101,7 +101,8 @@
       nix
       nixfmt-classic
       nixpkgs-fmt
-      nodejs-18_x
+      nodejs-20
+      pnpm
       parallel
       passExtensions.pass-otp
       #passExtensions.pass-tomb incompatible with darwin
