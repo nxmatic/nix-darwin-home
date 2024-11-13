@@ -75,6 +75,7 @@
       findutils
       flyctl
       gawk
+      gdu
       gh
       git-workspace
       gnugrep
@@ -96,7 +97,6 @@
       lazydocker
       luajit
       mmv
-      ncdu
       neofetch
       nix
       nixfmt-classic
@@ -124,6 +124,7 @@
       tree
       treefmt
       trivy
+      vfkit
       yarn
       yamllint
       yq-go

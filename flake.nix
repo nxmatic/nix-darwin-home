@@ -4,27 +4,27 @@
   nixConfig = {
     substituters = [
       "https://cache.nixos.org"
-      "https://kclejeune.cachix.org"
+      #      "https://kclejeune.cachix.org"
       "https://cache.flox.dev"
     ];
 
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "kclejeuneachix.org-1:fOCrECygdFZKbMxHClhiTS6oowOkJ/I/dh9q9b1I4ko="
+      #      "kclejeuneachix.org-1:fOCrECygdFZKbMxHClhiTS6oowOkJ/I/dh9q9b1I4ko="
       "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
     ];
   };
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-24.11-darwin"; #unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-24.05-darwin";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devenv.url = "github:cachix/devenv/latest";
@@ -32,8 +32,12 @@
       url = "github:nxmatic/flox?ref=hotfix/nix-remove-attrcursor-force-errors";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    socket-vmnet = {
+      url = "github:nxmatic/nix-socket-vmnet/develop";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     zen-browser = {
-      url = "github:MarceColl/zen-browser-flake";
+      url = "git+file:///Volumes/GitHub/nxmatic/nix-zen-browser";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
@@ -54,6 +58,7 @@
     devenv,
     flake-utils,
     home-manager,
+    socket-vmnet,
     nixpkgs,
     ...
   } @ inputs: let
@@ -83,7 +88,7 @@
             name: let
               overlay = self.overlays.${name} inputs;
             in
-              final: prev: builtins.trace "Applying overlay: ${name}" (overlay final prev)
+              final: prev: builtins.traceVerbose "Applying overlay: ${name}" (overlay final prev)
           )
           (builtins.attrNames self.overlays);
       });
@@ -91,24 +96,29 @@
     mkDarwinConfig = {
       system ? "aarch64-darwin",
       nixpkgs ? inputs.nixpkgs,
-      baseModules ? [home-manager.darwinModules.home-manager ./modules/darwin],
+      baseModules ? [
+        #       inputs.zen-browser.darwinModule
+        socket-vmnet.darwinModules.socket_vmnet
+        home-manager.darwinModules.home-manager
+        ./modules/darwin
+      ],
       extraModules ? [],
     }: let
       debugModule = {config, ...}: {
         _file = "debugModule";
         config = {
-          system.activationScripts.debug.text = builtins.trace "Defining activationScripts" ''
+          system.activationScripts.debug.text = builtins.traceVerbose "Defining activationScripts" ''
             echo "Debug: activationScripts is being executed"
           '';
         };
       };
     in
-      builtins.trace "Starting darwinSystem evaluation" (
+      builtins.traceVerbose "Starting darwinSystem evaluation" (
         inputs.darwin.lib.darwinSystem {
           inherit system;
           pkgs = nixpkgsFor.${system};
-          modules = builtins.trace "Combining modules" (baseModules ++ extraModules ++ [debugModule]);
-          specialArgs = builtins.trace "Setting specialArgs" {
+          modules = builtins.traceVerbose "Combining modules" (baseModules ++ extraModules ++ [debugModule]);
+          specialArgs = builtins.traceVerbose "Setting specialArgs" {
             inherit self inputs nixpkgs;
           };
         }
@@ -191,6 +201,7 @@
         inherit (self.packages.${prev.system}) sysdo pyEnv;
         inherit (inputs.devenv.packages.${prev.system}) devenv;
         inherit (inputs.maven-mvnd.packages.${prev.system}) maven-mvnd-m39 maven-mvnd-m40;
+        inherit (inputs.socket-vmnet.packages.${prev.system}) socket_vmnet;
       };
 
       birdOverlay = inputs: import ./overlays/bird.nix inputs;
