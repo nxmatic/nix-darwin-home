@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Determine the directory of this script or use HOOKS_DIR if set
+SCRIPT_DIR="${HOOKS_DIR:-$(realpath "$(dirname "${BASH_SOURCE[0]}")")}"
+POST_MERGE_SCRIPT="$SCRIPT_DIR/post-merge"
+
+# Check if post-merge script exists
+if [[ ! -x "$POST_MERGE_SCRIPT" ]]; then
+    echo "Error: post-merge script not found or not executable at $POST_MERGE_SCRIPT"
+    exit 1
+fi
+
+# Execute the post-merge script
+exec "$POST_MERGE_SCRIPT"

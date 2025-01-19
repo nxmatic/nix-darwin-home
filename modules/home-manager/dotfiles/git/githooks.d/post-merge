@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Source the utility script
+source ./sops_utils.sh
+
+# Check if .sops.yaml exists
+sops:check_sops_yaml
+
+# Extract matched files from .sops.yaml
+matchedFiles=($(extract_file_patterns))
+
+for originFile in "${matchedFiles[@]}"; do
+    encryptedFilename=$( sops:generate_encrypted_filename "$originFile" )
+
+    # Decrypt the file if it doesn't exist
+    sops:decrypt_file_if_missing "$originFile" "$encryptedFilename"
+
+    # Check for changes in the encrypted file after the merge
+    sops:check_for_changes "$originFile" "$encryptedFilename"
+done
