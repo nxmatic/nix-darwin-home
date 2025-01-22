@@ -1,0 +1,5 @@
+[filter "sops-xml"]
+  clean = /Users/nxmatic/.config/git/sops.d/xml-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/xml-smudge %f
+[diff "sops-xml"]
+        textconv = /Users/nxmatic/.config/git/sops.d/xml-textconv

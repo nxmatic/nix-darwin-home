@@ -1,0 +1,5 @@
+[filter "sops-json"]
+  clean = /Users/nxmatic/.config/git/sops.d/json-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/json-smudge %f
+[diff "sops-json"]
+        textconv = /Users/nxmatic/.config/git/sops.d/json-textconv

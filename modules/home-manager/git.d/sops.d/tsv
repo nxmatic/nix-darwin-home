@@ -1,0 +1,5 @@
+[filter "sops-tsv"]
+  clean = /Users/nxmatic/.config/git/sops.d/tsv-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/tsv-smudge %f
+[diff "sops-tsv"]
+        textconv = /Users/nxmatic/.config/git/sops.d/tsv-textconv

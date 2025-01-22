@@ -1,0 +1,5 @@
+[filter "sops-lua"]
+  clean = /Users/nxmatic/.config/git/sops.d/lua-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/lua-smudge %f
+[diff "sops-lua"]
+        textconv = /Users/nxmatic/.config/git/sops.d/lua-textconv

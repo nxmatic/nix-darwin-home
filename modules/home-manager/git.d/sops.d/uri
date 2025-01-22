@@ -1,0 +1,5 @@
+[filter "sops-uri"]
+  clean = /Users/nxmatic/.config/git/sops.d/uri-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/uri-smudge %f
+[diff "sops-uri"]
+        textconv = /Users/nxmatic/.config/git/sops.d/uri-textconv

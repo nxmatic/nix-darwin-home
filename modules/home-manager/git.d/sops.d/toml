@@ -1,0 +1,5 @@
+[filter "sops-toml"]
+  clean = /Users/nxmatic/.config/git/sops.d/toml-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/toml-smudge %f
+[diff "sops-toml"]
+        textconv = /Users/nxmatic/.config/git/sops.d/toml-textconv

@@ -1,0 +1,5 @@
+[filter "sops-props"]
+  clean = /Users/nxmatic/.config/git/sops.d/props-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/props-smudge %f
+[diff "sops-props"]
+        textconv = /Users/nxmatic/.config/git/sops.d/props-textconv

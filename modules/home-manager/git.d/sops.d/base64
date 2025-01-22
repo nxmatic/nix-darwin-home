@@ -1,0 +1,5 @@
+[filter "sops-base64"]
+  clean = /Users/nxmatic/.config/git/sops.d/base64-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/base64-smudge %f
+[diff "sops-base64"]
+        textconv = /Users/nxmatic/.config/git/sops.d/base64-textconv

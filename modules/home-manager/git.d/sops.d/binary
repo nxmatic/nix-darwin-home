@@ -1,0 +1,5 @@
+[filter "sops-binary"]
+  clean = /Users/nxmatic/.config/git/sops.d/binary-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/binary-smudge %f
+[diff "sops-binary"]
+        textconv = /Users/nxmatic/.config/git/sops.d/binary-textconv

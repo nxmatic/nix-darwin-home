@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   home.packages = [pkgs.github-cli pkgs.git-crypt];
+
   programs.git = {
     enable = true;
     aliases = {
@@ -34,5 +35,16 @@
     };
     difftastic.enable = false;
     lfs.enable = true;
+    includes = [
+      { path = "dotfiles"; }
+      { path = "sops"; }
+      { path = "local"; }
+    ];
   };
+
+  xdg.configFile.git = {
+    source = ./git.d;
+    recursive = true;
+  };
+
 }

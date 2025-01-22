@@ -1,0 +1,5 @@
+[filter "sops-yaml"]
+  clean = /Users/nxmatic/.config/git/sops.d/yaml-clean %f
+  smudge = /Users/nxmatic/.config/git/sops.d/yaml-smudge %f
+[diff "sops-yaml"]
+        textconv = /Users/nxmatic/.config/git/sops.d/yaml-textconv
