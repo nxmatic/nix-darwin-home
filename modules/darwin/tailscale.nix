@@ -5,10 +5,13 @@
   ...
 }:
 with lib; let
+  
+  user = config.profile.user;
+  userName = user.name;
+  userHome = user.home;
+
   cfg = config.services.tailscale;
-  username = config.user.name;
-  homeDir = config.home-manager.users."${username}".home.homeDirectory;
-  logPrefix = "${homeDir}/Library/Logs/tailscale";
+  logPrefix = "${userHome}/Library/Logs/tailscale";
 in {
   config = mkIf cfg.enable {
     environment.systemPackages = [pkgs.tailscale];

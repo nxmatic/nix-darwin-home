@@ -1,10 +1,23 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{ user, config, pkgs, lib, self, ... }:
+let
 
-  xdg.enable = true;
+  toPath = path: if builtins.typeOf path == "string" then /. + path else path;
+
+  userHome = user.home;
+
+  homeDirectory = userHome;
+
+in {
+{ user, config, pkgs, lib, self, ... }:
+let
+
+  toPath = path: if builtins.typeOf path == "string" then /. + path else path;
+
+  userHome = user.home;
+
+  homeDirectory = userHome;
+
+in {
 
   imports = [
     ./avahi.nix
@@ -29,7 +42,7 @@
     ./password-store.nix
     ./shell
     ./ssh.nix
-    ./teleport.nix
+#   ./teleport.nix
     ./tldr.nix
     ./tmate.nix
     ./tmux.nix
@@ -37,21 +50,15 @@
     ./xdg.nix
   ];
 
-  programs = {
-    zellij.enable = true;
-  };
-
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-
   home = {
+    homeDirectory = builtins.traceVerbose "homeDirectory: ${ builtins.typeOf homeDirectory }" homeDirectory;
+
     stateVersion = "24.11";
 
     sessionPath = [
-      "${config.home.homeDirectory}/.rd/bin"
-      "${config.home.homeDirectory}/.local/bin"
-      "${config.home.homeDirectory}/.krew/bin"
+      "${homeDirectory}/.rd/bin"
+      "${homeDirectory}/.local/bin"
+      "${homeDirectory}/.krew/bin"
     ];
 
     # Define package definitions for current user environment
@@ -68,7 +75,7 @@
       diffutils
       direnv
       docker
-      docker-compose 
+      docker-compose
       ffmpeg
       findutils
       flox
@@ -91,7 +98,7 @@
       kubectx
       kubernetes-helm
       kustomize
-#     lazydocker
+      #     lazydocker
       luajit
       minikube
       mmv
@@ -136,9 +143,8 @@
   targets.genericLinux.enable = false;
 
   programs = {
-    home-manager = {
-      enable = true;
-    };
+
+    home-manager.enable = true;
 
     bash.enable = true;
 
@@ -178,24 +184,23 @@
 
     zoxide.enable = true;
 
+    zellij.enable = true;
+
   };
 
   services = {
 
-    emacsDaemon = {
-      enable = true;
-    };
+    emacsDaemon = { enable = true; };
 
     mavenShadowRepositories = {
 
       enable = true;
 
-      mountPoints = [
-        "/Volumes/GitHub/HylandSoftware/hxpr"
-        "/Volumes/GitHub/nuxeo/nos"
-      ];
+      mountPoints =
+        [ "/Volumes/GitHub/HylandSoftware/hxpr" "/Volumes/GitHub/nuxeo/nos" ];
 
     };
 
   };
+
 }
