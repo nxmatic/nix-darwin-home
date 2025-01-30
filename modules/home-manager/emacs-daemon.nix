@@ -19,7 +19,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    launchd.agents.emacs-daemon = {
+    launchd.agents."org.emacs.daemon" = {
       enable = true;
       config = {
         Label = "emacs-daemon";

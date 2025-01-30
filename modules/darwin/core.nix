@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
 
   user = config.profile.user;
   userName = user.name;
@@ -17,9 +18,12 @@
     ${config.nix.package}/bin/nix store optimise
   '';
 
-in {
+in
+{
   environment = {
-    etc = {darwin.source = "${inputs.darwin}";};
+    etc = {
+      darwin.source = "${inputs.darwin}";
+    };
     # packages installed in system profile (more in ../common/default.nix)
     # systemPackages = [ ];
   };
@@ -27,7 +31,7 @@ in {
   # auto manage nixbld users with nix darwin
   nix = {
     configureBuildUsers = true;
-    nixPath = ["darwin=/etc/${config.environment.etc.darwin.target}"];
+    nixPath = [ "darwin=/etc/${config.environment.etc.darwin.target}" ];
 
     # Additional garbage collection triggers
     extraOptions = ''
@@ -39,15 +43,6 @@ in {
 
     # Optimize the store
     optimise.automatic = true;
-  };
-
-  launchd.user.agents.nix-gc = {
-    serviceConfig = {
-      ProgramArguments = ["${gcScript}"];
-      KeepAlive = false;
-      RunAtLoad = false;
-      StartInterval = 43200; # 12 hours in seconds
-    };
   };
 
   nixpkgs.config = {
@@ -71,8 +66,14 @@ in {
     XDG_RUNTIME_DIR = "${userHome}/.xdg";
   };
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
+  services = {
+
+    # Auto upgrade nix package and the daemon service.
+    nix-daemon = {
+      enable = true;
+    };
+
+  };
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog

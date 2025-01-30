@@ -22,12 +22,13 @@ in {
   imports = [
     ./avahi.nix
     ./bat.nix
-    ./chromium.nix
+    ./cachix-agent.nix
+  # ./chromium.nix
     ./dircolors.nix
     ./direnv.nix
     ./dotfiles
     ./emacs.nix
-    ./firefox.nix
+  # ./firefox.nix
     ./flox.nix
     ./flox-direnv.nix
     ./fzf.nix
@@ -37,7 +38,7 @@ in {
     ./java.nix
     ./keychain.nix
     ./kitty.nix
-    ./maven-shadow-repositories.nix
+    ./shadow-repositories.nix
     ./nushell.nix
     ./password-store.nix
     ./shell
@@ -49,6 +50,12 @@ in {
     ./vscode
     ./xdg.nix
   ];
+
+  nix.gc = {
+    automatic = true;
+    frequency = "daily";
+    options = "--delete-older-than 1d";
+  };
 
   home = {
     homeDirectory = builtins.traceVerbose "homeDirectory: ${ builtins.typeOf homeDirectory }" homeDirectory;
@@ -190,11 +197,20 @@ in {
 
   services = {
 
+    # Enable the emacs daemon
     emacsDaemon = { enable = true; };
 
-    mavenShadowRepositories = {
+    # Enable the cachix agent
+    cachix-agent = {
+      enableLaunchdAgent = true;
+      name = "nix-community";
+      credentialsFile = ./cachix-agent.dhall;
+    };
 
-      enable = true;
+    # Enable shadowing folders
+    shadowRepositories = {
+
+      enable = false;
 
       mountPoints =
         [ "/Volumes/GitHub/HylandSoftware/hxpr" "/Volumes/GitHub/nuxeo/nos" ];
