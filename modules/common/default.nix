@@ -12,6 +12,7 @@
     ./qemu.nix
   ];
 
+  # Enable and configure Zsh
   programs = {
     zsh = {
       enable = true;
@@ -20,6 +21,7 @@
     };
   };
 
+  # User configuration
   user = {
     description = "Stephane Lacoin";
     home = "${
@@ -30,14 +32,7 @@
     shell = pkgs.zsh;
   };
 
-  # bootstrap home manager using system config
-  hm = {
-    imports = [
-      ../home-manager
-    ];
-  };
-
-  # let nix manage home-manager profiles and use global nixpkgs
+  # Home-manager configuration
   home-manager = {
     extraSpecialArgs = {inherit self inputs;};
     useGlobalPkgs = true;
@@ -46,12 +41,7 @@
     backupFileExtension = "nix-backup";
   };
 
-  # zen-browser = {
-  #    enable = false;
-  #    packages = pkgs.zen-browser-unwrapped;
-  #  };
-
-  # environment setup
+  # Environment setup
   environment = {
     variables = {
       XDG_RUNTIME_DIR = "${config.user.home}/.xdg";
@@ -66,15 +56,16 @@
       nixpkgs.source = "${inputs.nixpkgs}";
     };
 
-    # list of acceptable shells in /etc/shells
+    # List of acceptable shells in /etc/shells
     shells = with pkgs; [bash zsh fish];
   };
 
+  # Tailscale service configuration
   services.tailscale = {
     enable = true;
-    #logDir = config.logDir or null; # Use the value of the logDir option, or null if it is not set
   };
 
+  # Fonts configuration
   fonts = {
     packages = with pkgs; [powerline-fonts];
   };
