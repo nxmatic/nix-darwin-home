@@ -1,6 +1,7 @@
-{ lib, config, ... }: let
+{ lib, config, ... }:
+let
 
-cfg = config.profile;
+  cfg = config.profile;
 
 in
 {
@@ -76,12 +77,6 @@ in
       };
 
       description = "Profile currently evaluated";
-    };
-
-    hm = lib.mkOption {
-      type = lib.types.attrs;
-      description = "Home Manager configuration";
-      default = lib.mkDefault cfg.hm;
     };
 
   };
