@@ -1,91 +1,130 @@
 ---
-principals:
-  darwin: &darwin-principals
-    - staff
-    - admin
-  linux: &linux-principals
-    - users
-    - wheel
-keys:
-  ed25519: &ed25519-key
+x-principals: &principals
+  user: &user-principals
+    committed: committed
+    work: work
+  agent: &agent-principals
+    linux-builder: linux-builder
+x-usages:
+  ssh-host: &ssh-host-usage
+    - ssh-host
+  ssh-user: &ssh-user-usage
+    - ssh-user
+  ssh-user-and-host: &ssh-user-and-host-usage
+    - ssh-user
+    - ssh-host
+x-keys:
+  ed25519: &ssh-ed25519-key
     type: ssh-ed25519
-  mammoth-skate-darwin: &mammoth-skate-darwin-key
-    <<: *ed25519-key
-    authorities:
-      mammoth-skate:
-        principals: *darwin-principals
-  mammoth-skate-linux: &mammoth-skate-linux-key
-    <<: *ed25519-key
-    authorities:
-      mammoth-skate:
-        principals: *linux-principals
-  github: &github-signing-keys
-    github-hyland-signing-key:
-      <<: *ed25519-key
-      comment: gitub's published hyland signing key
-      public: AAAAC3NzaC1lZDI1NTE5AAAAIF23Jq3UEKPHGZOGgdQdIvc4Am5EYQZNnCSA+bSs2WOP
-      # sops:encrypted
-      private: |-
-        -----BEGIN OPENSSH PRIVATE KEY-----
-        b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-        QyNTUxOQAAACBdtyat1BCjxxmThoHUHSL3OAJuRGEGTZwkgPm0rNljjwAAAJizk4Fos5OB
-        aAAAAAtzc2gtZWQyNTUxOQAAACBdtyat1BCjxxmThoHUHSL3OAJuRGEGTZwkgPm0rNljjw
-        AAAEB/J1spZcmY5vI6kkiDaoyF+jZ1PC5T2GfH87UwBaMU3V23Jq3UEKPHGZOGgdQdIvc4
-        Am5EYQZNnCSA+bSs2WOPAAAAD2h4cHIgZ2l0IGFjY2VzcwECAwQFBg==
-        -----END OPENSSH PRIVATE KEY-----
-authorities: &authorities
-  mammoth-skate:
-    <<: *ed25519-key
-    comment: cert-authority@mammoth-skate
-    public: AAAAC3NzaC1lZDI1NTE5AAAAIMm2fu/uVbaaj1OljiSnZ9T1ES9yvbG+Y6JhyLrnQQAS
+    usage:
+      - user-signing
+  ssh-authority: &ssh-authority-key
+    <<: *ssh-ed25519-key
+    usage: 
+      - ssh-authority
+  github-signing: &github-signing-key
+    <<: *ssh-ed25519-key
+    usage: 
+      - github-signing
+x-github-signing-keys: &github-signing-keys
+  github-hyland-signing-key: &github-hyland-signing-key
+    <<: *github-signing-key
+    comment: github's published hyland signing key
+    public: |-
+      AAAAC3NzaC1lZDI1NTE5AAAAIF23Jq3UEKPHGZOGgdQdIvc4Am5EYQZNnCSA+bSs2WOP
     # sops:encrypted
     private: |-
       -----BEGIN OPENSSH PRIVATE KEY-----
       b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-      QyNTUxOQAAACDJtn7v7lW2mo9TpY4kp2fU9REvcr2xvmOiYci650EAEgAAAJiYDZtRmA2b
-      UQAAAAtzc2gtZWQyNTUxOQAAACDJtn7v7lW2mo9TpY4kp2fU9REvcr2xvmOiYci650EAEg
-      AAAEDkqwy0SqqNYXq+4+htWltyyXdBUWP3tQ/V0zAxOm8a3Mm2fu/uVbaaj1OljiSnZ9T1
-      ES9yvbG+Y6JhyLrnQQASAAAAD254bWF0aWNAYmlvc2tvcAECAwQFBg==
+      QyNTUxOQAAACBdtyat1BCjxxmThoHUHSL3OAJuRGEGTZwkgPm0rNljjwAAAJizk4Fos5OB
+      aAAAAAtzc2gtZWQyNTUxOQAAACBdtyat1BCjxxmThoHUHSL3OAJuRGEGTZwkgPm0rNljjw
+      AAAEB/J1spZcmY5vI6kkiDaoyF+jZ1PC5T2GfH87UwBaMU3V23Jq3UEKPHGZOGgdQdIvc4
+      Am5EYQZNnCSA+bSs2WOPAAAAD2h4cHIgZ2l0IGFjY2VzcwECAwQFBg==
       -----END OPENSSH PRIVATE KEY-----
+x-mammoth-skate: &mammoth-skate
+  <<: *ssh-authority-key
+  comment: cert-authority@mammoth-skate
+  domain: mammoth-skate.ts.net
+  public: AAAAC3NzaC1lZDI1NTE5AAAAIMm2fu/uVbaaj1OljiSnZ9T1ES9yvbG+Y6JhyLrnQQAS
+  # sops:encrypted
+  private: |-
+    -----BEGIN OPENSSH PRIVATE KEY-----
+    b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+    QyNTUxOQAAACDJtn7v7lW2mo9TpY4kp2fU9REvcr2xvmOiYci650EAEgAAAJiYDZtRmA2b
+    UQAAAAtzc2gtZWQyNTUxOQAAACDJtn7v7lW2mo9TpY4kp2fU9REvcr2xvmOiYci650EAEg
+    AAAEDkqwy0SqqNYXq+4+htWltyyXdBUWP3tQ/V0zAxOm8a3Mm2fu/uVbaaj1OljiSnZ9T1
+    ES9yvbG+Y6JhyLrnQQASAAAAD254bWF0aWNAYmlvc2tvcAECAwQFBg==
+    -----END OPENSSH PRIVATE KEY-----
+x-mammoth-skate-darwin-key: &mammoth-skate-darwin-key
+  <<: *ssh-ed25519-key
+  authorities:
+    mammoth-skate:
+      <<: *mammoth-skate
+      usage: 
+        - ssh-host
+        - ssh-user
+x-mammoth-skate-linux-key: &mammoth-skate-linux-key
+  <<: *ssh-ed25519-key
+  authorities:
+    mammoth-skate:
+      <<: *mammoth-skate
+      usage: 
+        - ssh-host
+        - ssh-user
+      principals:
+        <<: [ *user-principals, *agent-principals ]
+x-authorities-keys: &authorities-keys
+  mammoth-skate: *mammoth-skate
+x-shared-keys: &shared-keys
+  <<:
+    - *authorities-keys
+    - *github-signing-keys
 ---
 profiles:
   committed:
-    authorities: *authorities
-    keys:
-      <<: *github-signing-keys
-      nxmatic:
-        <<: *mammoth-skate-darwin-key
-        comment: nxmatic@mammoth-skate
-      linux-builder:
-        <<: *mammoth-skate-linux-key
-        comment: linux-builder@bioskop
-        public: AAAAC3NzaC1lZDI1NTE5AAAAINzCSzYvJ8XBSN/vr8Azq4ZqWyXbk/xlHZHTrDtYrDjK
-        # sops:encrypted
-        private: |-
-          -----BEGIN OPENSSH PRIVATE KEY-----
-          b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-          QyNTUxOQAAACDcwks2LyfFwUjf76/AM6uGalsl25P8ZR2R06w7WKw4ygAAAJhh0bbDYdG2
-          wwAAAAtzc2gtZWQyNTUxOQAAACDcwks2LyfFwUjf76/AM6uGalsl25P8ZR2R06w7WKw4yg
-          AAAEA3J73b0J0G8PV+WwVteqcx/hLpQmuoEkfOKxtTAVbcgNzCSzYvJ8XBSN/vr8Azq4Zq
-          WyXbk/xlHZHTrDtYrDjKAAAAEWJ1aWxkZXJAbG9jYWxob3N0AQIDBA==
-          -----END OPENSSH PRIVATE KEY-----
+    <<: *shared-keys
+    host:
+      <<: *mammoth-skate-darwin-key
+      comment: nxmatic@mammoth-skate
+      principals: *user-principals
+    linux-builder:
+      <<: *mammoth-skate-linux-key
+      comment: linux-builder@mammoth-skate
+      usage:
+        - agent-signing
+        - user-signing
+      principals:
+        <<: [ *user-principals, *agent-principals ]
+      public: |-
+        AAAAC3NzaC1lZDI1NTE5AAAAINzCSzYvJ8XBSN/vr8Azq4ZqWyXbk/xlHZHTrDtYrDjK
+      # sops:encrypted
+      private: |-
+        -----BEGIN OPENSSH PRIVATE KEY-----
+        b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+        QyNTUxOQAAACDcwks2LyfFwUjf76/AM6uGalsl25P8ZR2R06w7WKw4ygAAAJhh0bbDYdG2
+        wwAAAAtzc2gtZWQyNTUxOQAAACDcwks2LyfFwUjf76/AM6uGalsl25P8ZR2R06w7WKw4yg
+        AAAEA3J73b0J0G8PV+WwVteqcx/hLpQmuoEkfOKxtTAVbcgNzCSzYvJ8XBSN/vr8Azq4Zq
+        WyXbk/xlHZHTrDtYrDjKAAAAEWJ1aWxkZXJAbG9jYWxob3N0AQIDBA==
+        -----END OPENSSH PRIVATE KEY-----
   work:
-    authorities: *authorities
-    keys:
-      <<: *github-signing-keys
-      stephane.lacoin:
-        <<: *mammoth-skate-darwin-key
-        comment: stephane.lacoin@mammoth-skate
-      linux-builder:
-        <<: *mammoth-skate-linux-key
-        comment: linux-builde@alcide
-        public: AAAAC3NzaC1lZDI1NTE5AAAAIJBWcxb/Blaqt1auOtE+F8QUWrUotiC5qBJ+UuEWdVCb
-        # sops:encrypted
-        private: |-
-          -----BEGIN OPENSSH PRIVATE KEY-----
-          b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-          QyNTUxOQAAACCQVnMW/wZWqrdWrjrRPhfEFFq1KLYguagSflLhFnVQmwAAAJASuMMnErjD
-          JwAAAAtzc2gtZWQyNTUxOQAAACCQVnMW/wZWqrdWrjrRPhfEFFq1KLYguagSflLhFnVQmw
-          AAAEDIN2VWFyggtoSPXcAFy8dtG1uAig8sCuyE21eMDt2GgJBWcxb/Blaqt1auOtE+F8QU
-          WrUotiC5qBJ+UuEWdVCbAAAACnJvb3RAbml4b3MBAgM=
-          -----END OPENSSH PRIVATE KEY-----
+    <<: *shared-keys
+    host:
+      <<: *mammoth-skate-darwin-key
+      comment: stephane.lacoin@mammoth-skate
+      principals: *user-principals
+    linux-builder:
+      <<: *mammoth-skate-linux-key
+      comment: linux-builder@mammoth-skate
+      principals:
+        <<: [ *user-principals, *agent-principals ]
+      public: |-
+        AAAAC3NzaC1lZDI1NTE5AAAAIJBWcxb/Blaqt1auOtE+F8QUWrUotiC5qBJ+UuEWdVCb
+      # sops:encrypted
+      private: |-
+        -----BEGIN OPENSSH PRIVATE KEY-----
+        b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+        QyNTUxOQAAACCQVnMW/wZWqrdWrjrRPhfEFFq1KLYguagSflLhFnVQmwAAAJASuMMnErjD
+        JwAAAAtzc2gtZWQyNTUxOQAAACCQVnMW/wZWqrdWrjrRPhfEFFq1KLYguagSflLhFnVQmw
+        AAAEDIN2VWFyggtoSPXcAFy8dtG1uAig8sCuyE21eMDt2GgJBWcxb/Blaqt1auOtE+F8QU
+        WrUotiC5qBJ+UuEWdVCbAAAACnJvb3RAbml4b3MBAgM=
+        -----END OPENSSH PRIVATE KEY-----

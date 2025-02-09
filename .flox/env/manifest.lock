@@ -14,6 +14,9 @@
       },
       "nvfetcher": {
         "pkg-path": "nvfetcher"
+      },
+      "pstree": {
+        "pkg-path": "pstree"
       }
     },
     "hook": {},
@@ -47,6 +50,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -77,6 +82,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -107,6 +114,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -137,6 +146,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -167,6 +178,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -197,6 +210,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -227,6 +242,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -257,6 +274,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -287,6 +306,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -317,6 +338,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -347,6 +370,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -377,6 +402,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -407,6 +434,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -437,6 +466,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -467,6 +498,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -497,6 +530,8 @@
       "rev_date": "2024-11-25T07:53:41Z",
       "scrape_date": "2024-11-27T03:52:37Z",
       "stabilities": [
+        "lts",
+        "stable",
         "staging",
         "unstable"
       ],
@@ -507,6 +542,134 @@
       ],
       "outputs": {
         "out": "/nix/store/53np7s5hlwah4kfbqs996s4pb4sla8hl-nvfetcher-0.6.2.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pstree",
+      "broken": false,
+      "derivation": "/nix/store/x7smzawxrx5p1vna024s3yb5hzrjfgz3-pstree-2.39.drv",
+      "description": "Show the set of running processes as a tree",
+      "install_id": "pstree",
+      "license": "GPL-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
+      "name": "pstree-2.39",
+      "pname": "pstree",
+      "rev": "4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
+      "rev_count": 712559,
+      "rev_date": "2024-11-25T07:53:41Z",
+      "scrape_date": "2024-11-27T03:52:37Z",
+      "stabilities": [
+        "lts",
+        "stable",
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.39",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/hwl7kbm911qdlpnzi0fqhrkp91xqnriw-pstree-2.39"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pstree",
+      "broken": false,
+      "derivation": "/nix/store/fgbk0kcdpsa38g897lyggjp4r02bc6m6-pstree-2.39.drv",
+      "description": "Show the set of running processes as a tree",
+      "install_id": "pstree",
+      "license": "GPL-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
+      "name": "pstree-2.39",
+      "pname": "pstree",
+      "rev": "4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
+      "rev_count": 712559,
+      "rev_date": "2024-11-25T07:53:41Z",
+      "scrape_date": "2024-11-27T03:52:37Z",
+      "stabilities": [
+        "lts",
+        "stable",
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.39",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/12rxv8cbzlkglh120slhpa1c5b0rp096-pstree-2.39"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pstree",
+      "broken": false,
+      "derivation": "/nix/store/8ffz1mibnhlssl4i2xdnjxwabzpz307r-pstree-2.39.drv",
+      "description": "Show the set of running processes as a tree",
+      "install_id": "pstree",
+      "license": "GPL-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
+      "name": "pstree-2.39",
+      "pname": "pstree",
+      "rev": "4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
+      "rev_count": 712559,
+      "rev_date": "2024-11-25T07:53:41Z",
+      "scrape_date": "2024-11-27T03:52:37Z",
+      "stabilities": [
+        "lts",
+        "stable",
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.39",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/25n9kh5xx4hgc8m49aiqck019qjnmqij-pstree-2.39"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pstree",
+      "broken": false,
+      "derivation": "/nix/store/f4i9h7wdsp82jqdsy88nfz9fql51kc90-pstree-2.39.drv",
+      "description": "Show the set of running processes as a tree",
+      "install_id": "pstree",
+      "license": "GPL-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
+      "name": "pstree-2.39",
+      "pname": "pstree",
+      "rev": "4633a7c72337ea8fd23a4f2ba3972865e3ec685d",
+      "rev_count": 712559,
+      "rev_date": "2024-11-25T07:53:41Z",
+      "scrape_date": "2024-11-27T03:52:37Z",
+      "stabilities": [
+        "lts",
+        "stable",
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.39",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/p1k9025lm64j77mp9viaixi228wdx1h8-pstree-2.39"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
