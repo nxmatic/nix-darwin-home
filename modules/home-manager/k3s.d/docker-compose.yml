@@ -1,0 +1,42 @@
+services:
+
+  worker:
+    build:
+      dockerfile_inline: |
+        FROM debian:bookworm
+
+        RUN <<'EOS' cut -c 5- | bash -exo pipefail
+            apt-get update -y
+            apt-get upgrade -y
+            apt-get install -y coreutils debianutils avahi-utils curl systemd
+        EOS
+
+        RUN --mount=type=secret,id=k3s_token <<'EOS' cut -c 5- | bash -exo pipefail    
+            curl -sfL https://get.k3s.io | K3S_URL=https://bioskop.local:6443 K3S_TOKEN="$( cat /run/secrets/k3s_token )" sh -x -
+        EOS
+      secrets:
+        - k3s_token
+      args:
+        K3S_URL: ${K3S_URL:-https://bioskop.local:6443}
+    container_name: worker
+    tmpfs:
+      - /run
+      - /var/run
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+    privileged: true
+    restart: always
+    networks:
+      - k3s_net
+
+networks:
+  k3s_net:
+    driver: bridge
+
+secrets:
+  k3s_token:
+    name: worker_k3s_token
+    environment: K3S_TOKEN    

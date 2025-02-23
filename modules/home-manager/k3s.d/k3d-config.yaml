@@ -1,0 +1,53 @@
+kind: Simple
+apiVersion: k3d.io/v1alpha5
+metadata:
+  name: bioskop
+servers: 1
+agents: 1
+kubeAPI:
+  hostIP: 0.0.0.0
+  hostPort: "6443"
+image: rancher/k3s:v1.32.2-rc3-k3s1-arm64
+network: k3d
+ports:
+  - port: 8080:80
+    nodeFilters:
+      - loadbalancer
+  - port: 0.0.0.0:8443:443
+    nodeFilters:
+      - loadbalancer
+options:
+  k3d:
+    wait: true
+    timeout: 6m0s
+    disableLoadbalancer: false
+    disableImageVolume: false
+    disableRollback: false
+  k3s:
+    extraArgs:
+      - arg: --tls-san=127.0.0.1
+        nodeFilters:
+          - server:*
+      - arg: --tls-san=bioskop.local
+        nodeFilters:
+          - server:*
+      - arg: --tls-san=bioskop.mammoth-skate.ts.net
+        nodeFilters:
+          - server:*
+    nodeLabels: []
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true
+  runtime:
+    gpuRequest: ""
+    serversMemory: ""
+    agentsMemory: ""
+    labels:
+      - label: foo=bar
+        nodeFilters:
+          - server:0
+          - loadbalancer
+registries:
+  use:
+    - k3d-cluster-registry:5222 # some other k3d-managed registry; same as `--registry-use 'k3d-myotherregistry:5000'`
+      # k3d registry create cluster-registry --port 5222 --default-network k3d
