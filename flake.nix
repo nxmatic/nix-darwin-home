@@ -984,8 +984,22 @@
             inherit system;
           });
           systemPkgs = pkgsFor { inherit system; };
+          ndhNixBashTrampoline =
+            if system == "aarch64-darwin" then ndhNixBashTrampolineDarwin else ndhNixBashTrampolineLinux;
         in
         {
+          # manage-tailnet on PATH for BOTH systems (a packages output, not just the app):
+          # rke2lab's flox-catalogue re-exports packages.aarch64-linux.manage-tailnet so the
+          # in-cluster tailnet-purge Job installs it via a FloxEnv. Wired to the PER-SYSTEM
+          # store API + trampoline so it builds on aarch64-linux too — the script is bash +
+          # curl + yq, cross-platform. On aarch64-darwin these resolve to the same Darwin
+          # helpers as before, so the darwin build is unchanged (same store path).
+          manage-tailnet = import ./modules/.common.d/manage-tailnet.d {
+            pkgs = systemPkgs;
+            catalog = catalogData;
+            ndhStore = ndhStoreApi;
+            nixBashTrampoline = ndhNixBashTrampoline;
+          };
           ${ndhBringupRuntimeAttr} = mkNdhBootstrapRuntimePackage system;
           ndh-disko-module-pinned = mkNdhDiskoPinnedModule system;
           ndh-disko-config = ndhStoreApi.writeText "zfs-disko-config.nix" (
@@ -1145,16 +1159,9 @@
           tartAttrs
           // {
             nerd-tart = anyHostDeploy;
-            # manage-tailnet on PATH (a packages output, not just the app) so a
-            # consumer can install it via the flake — e.g. rke2lab's flox env, so the
-            # incus GROW's local.Command prunes stale tailscale devices on a plain
-            # `pulumi up`. Same recipe as the app (package.nix), darwin-only.
-            manage-tailnet = import ./modules/.common.d/manage-tailnet.d {
-              pkgs = systemPkgs;
-              catalog = catalogData;
-              ndhStore = ndhStoreApiDarwin;
-              nixBashTrampoline = ndhNixBashTrampolineDarwin;
-            };
+            # manage-tailnet moved to the common (both-systems) body above — it now builds
+            # for aarch64-linux too (per-system store API + trampoline), so the darwin-only
+            # copy here is gone.
           }
         )
         // nixpkgs.lib.optionalAttrs (system == "aarch64-linux") (
