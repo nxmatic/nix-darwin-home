@@ -1,16 +1,17 @@
 { tailscale-fork, ... }:
 final: prev:
 let
-  # Use the fork's own `flake.nix` to build tailscale: it carries
-  # `flakehashes.json` (vendorHash + go toolchain SRI) keyed to whatever
-  # upstream tag the fork is currently rebased on, so the build is
-  # decoupled from nixpkgs-unstable's package version. To roll the fork:
+  # Use the fork's own `flake.nix` to build tailscale: upstream ships
+  # `flakehashes.json` (vendorHash + go toolchain SRI) keyed to the
+  # upstream tag the fork is rebased on, so the build is decoupled from
+  # nixpkgs-unstable's package version. To roll the fork:
   #
   #   1. In /private/var/lib/git/tailscale/tailscale, rebase the
-  #      `nxmatic/feature/extra-records-cname` branch onto the new
-  #      upstream tag.
-  #   2. Run `nix run .#tool-updateflakes` (or whatever the fork's flake
-  #      exposes) to refresh `flakehashes.json` if go.mod changed.
+  #      `nxmatic/integration/1.102` branch onto the new upstream
+  #      release-branch tip (our patches are pure-Go, they don't touch
+  #      go.mod, so `flakehashes.json` stays valid across the rebase).
+  #   2. Only if go.mod changed (rare), refresh `flakehashes.json` via
+  #      the fork flake's update tool.
   #   3. `git push --force-with-lease`.
   #   4. From this repo: `nix flake update tailscale-fork`.
   forkPkgs = tailscale-fork.packages.${prev.stdenv.hostPlatform.system};
@@ -32,7 +33,7 @@ let
       builtins.substring 0 7 tailscale-fork.rev
     else
       "unknown";
-  forkBranchTag = "nxmatic-cname";
+  forkBranchTag = "nxmatic-integration";
 in
 {
   # The fork's `packages.<system>.tailscale` is built from the patched

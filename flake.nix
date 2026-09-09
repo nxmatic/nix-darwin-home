@@ -107,15 +107,18 @@
       inputs.flake-commons.follows = "flake-commons";
     };
 
-    # Forked tailscale carrying the CNAME-in-extra_records patch (see
-    # overlays/tailscale.nix and the upstream PR tracked there). The
-    # fork is consumed as a real flake — it builds itself via its
-    # own `flakehashes.json` so vendorHash is no longer coupled to
-    # whatever tailscale version nixpkgs-unstable happens to ship.
-    # `nixpkgs` is pinned to flake-commons so the fork's binaries
-    # share a glibc/openssl/etc with the rest of the closure.
+    # Forked tailscale carrying our patches (see overlays/tailscale.nix):
+    # the CNAME-in-extra_records resolver support and the SSH-interception
+    # port-2222 switch, rebased onto upstream's release-branch/1.102 as the
+    # single `nxmatic/integration/1.102` branch. The fork is consumed as a
+    # real flake — it builds itself via upstream tailscale's own
+    # `flakehashes.json` (vendorHash + go-toolchain SRI, kept in sync with
+    # go.mod by upstream), so vendorHash is decoupled from whatever
+    # tailscale version nixpkgs-unstable happens to ship. `nixpkgs` is
+    # pinned to flake-commons so the fork's binaries share a
+    # glibc/openssl/etc with the rest of the closure.
     tailscale-fork = {
-      url = "github:nxmatic/tailscale/nxmatic/feature/extra-records-cname";
+      url = "github:nxmatic/tailscale/nxmatic/integration/1.102";
       inputs.nixpkgs.follows = "flake-commons/nixpkgs-unstable";
     };
   };
