@@ -321,7 +321,13 @@ case "${OP}" in
   # If the file was commited and its decrypted content is the same as the new input,
   # output the old encrypted content.
   ENCRYPTED_HEAD_CONTENTS="$(git cat-file -p "HEAD:${META[filePath]}" 2>/dev/null || true)"
-  DECRYPTED_HEAD_CONTENTS="$(git::sops decrypt <<<"${ENCRYPTED_HEAD_CONTENTS}")"
+  # HEAD may NOT be sops-encrypted: a file first transitioning to sops, or one a prior
+  # non-required commit stored unfiltered (plaintext) — decrypting it then fails "metadata not
+  # found". Under `required = true` a non-zero here would abort EVERY git op on the file (status
+  # wedged). Tolerate it: an undecryptable HEAD is treated as no comparable HEAD, so the input is
+  # (re-)encrypted below rather than compared — which also transitions a leaked plaintext blob to
+  # ciphertext on its next stage.
+  DECRYPTED_HEAD_CONTENTS="$(git::sops decrypt <<<"${ENCRYPTED_HEAD_CONTENTS}" 2>/dev/null || true)"
 
   INPUT="$(cat /dev/stdin)"
 
