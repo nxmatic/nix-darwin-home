@@ -103079,11 +103079,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788337890,
-        "narHash": "sha256-GBOWi/NJPU0tZwaOo3QsZqr65in8h+a5qQ/0hPzqVBk=",
+        "lastModified": 1788692069,
+        "narHash": "sha256-wTeq0IvYw9RHfSWox9Y0houQR+4in+Xo5D3n0lIU1oU=",
         "owner": "seedmatic",
         "repo": "flox-controller",
-        "rev": "b30201ca73d454c3b546c7f0dbbc9fedb414ad7c",
+        "rev": "b6ac4c2663a8ca7a64cb1d7d53aa9b8c2b808b03",
         "type": "github"
       },
       "original": {
@@ -282366,11 +282366,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788501588,
-        "narHash": "sha256-x5V+47hleIDNDTKbKMv5AQzf6t+O6YDtvhAqZ+ZDwJ8=",
+        "lastModified": 1788941422,
+        "narHash": "sha256-Dhgphfv1WIILDoZDSsAmPH/nBNnCvckZ7RanCMZK7bs=",
         "owner": "seedmatic",
         "repo": "rke2lab",
-        "rev": "7a43f2c7be9e5af34c62d718ac5d4368c1126336",
+        "rev": "10d51222b4b28f94e5682b4917d31880bee9de0a",
         "type": "github"
       },
       "original": {
