@@ -57,6 +57,12 @@ format="text"
 only_kind=""
 client_secret_file=""
 workdir=""
+# Hostnames --prune-stale-devices must SPARE even when stale: a device whose identity we PERSIST
+# and RESTORE across a cold-start (a funnel proxy backed by a stable state Secret) must survive so
+# the restored node key re-attaches to the SAME device (same MagicDNS name, cert reused) instead of
+# re-registering. Only the drifted duplicates (pipelines-webhook-1, …) and un-persisted orphans are
+# pruned. Exact-name match, repeatable via --keep-host.
+keep_hosts=()
 TOKEN=""
 
 # log() narrates on stdout (the terminal, since command:run redirects only
@@ -112,6 +118,12 @@ Safe by default. Manages the per-kind Tailscale SaaS auth keys + the ACL.
                      --yes.  Protects personal (untagged) + currently-online devices.
   --stale-after <dur>  Age threshold for --prune-stale-devices: Ns/Nm/Nh/Nd
                      (default 1h).
+  --keep-host <name>   Spare this EXACT hostname from --prune-stale-devices even
+                     when stale (repeatable).  For a persisted funnel whose
+                     identity is restored across a cold-start: keep it so the
+                     restored node key re-attaches to the SAME device (name +
+                     cert reused).  Drifted duplicates (name-1, name-2) do not
+                     match the bare name, so they are still pruned.
   --format <fmt>     Output format: text (default) or json.  json emits JSON
                      Lines on stdout — every narration line as a {level,msg}
                      object, and each pruned device as a {event:"pruned",...}
@@ -321,6 +333,18 @@ prune_stale_devices() {
 			warn "  skip $host ($id): unparseable lastSeen ($seen)"
 			continue
 		}
+		# Spare a persisted device by EXACT hostname (--keep-host): its identity is restored across a
+		# cold-start, so it must survive to re-attach.  A drifted duplicate (host-1, host-2) does not
+		# match the bare name, so it is still pruned — the reclaim we actually want.
+		if [ "${#keep_hosts[@]}" -gt 0 ]; then
+			local keep
+			for keep in "${keep_hosts[@]}"; do
+				if [ "$host" = "$keep" ]; then
+					log "  keep $host ($id): persisted device (--keep-host)"
+					continue 2
+				fi
+			done
+		fi
 		age=$((now - seen_s))
 		[ "$age" -gt "$threshold_s" ] || continue
 		n=$((n + 1))
@@ -463,6 +487,11 @@ main() {
 			shift
 			stale_after="${1:-}"
 			[ -n "$stale_after" ] || die "--stale-after needs an argument"
+			;;
+		--keep-host)
+			shift
+			[ -n "${1:-}" ] || die "--keep-host needs an argument"
+			keep_hosts+=("$1")
 			;;
 		--format=*) format="${1#*=}" ;;
 		--format)
