@@ -1,5 +1,10 @@
-#!/run/current-system/sw/bin/env -S bash -euo pipefail
+#!/usr/bin/env bash
 # -*- mode: sh -*-
+# Portable shebang: the host materialises /run/current-system via nix-darwin/nixos
+# activation, but a flox container (the in-cluster render pod) has no such path — so
+# the SSOT script targets /usr/bin/env (present on macOS, NixOS and standard containers)
+# and moves the strict flags into the body, off the shebang's -S dependency.
+set -euo pipefail
 
 test -n "${GIT_TRACE:-}" && set -x
 
