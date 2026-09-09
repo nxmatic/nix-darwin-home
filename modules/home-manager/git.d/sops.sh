@@ -297,17 +297,24 @@ fi
 
 case "${OP}" in
 "smudge")
-  # Just decrypt the stdin contents.
+  # Decrypt the stdin blob. Capture it first so a non-sops blob can be passed through.
+  INPUT="$(cat)"
   TMP=$(mktemp)
   decrypt_rc=0
-  DECRYPTED=$(git::sops decrypt </dev/stdin 2>"$TMP") || decrypt_rc=$?
+  DECRYPTED=$(git::sops decrypt <<<"${INPUT}" 2>"$TMP") || decrypt_rc=$?
   err=$(cat "$TMP")
   rm "$TMP"
   wrong_key_error_message="age: no identity matched any of the recipients"
+  metadata_missing="sops metadata not found"
   if [[ $err == *"${wrong_key_error_message}"* ]]; then
     # Host has no matching age identity — leave worktree empty rather than
     # writing stale ciphertext. Expected on machines without the key.
     :
+  elif [[ $err == *"${metadata_missing}"* ]]; then
+    # The blob at rest is NOT sops-encrypted (plaintext a prior non-required commit stored, or
+    # one not yet cleaned) — nothing to decrypt, so pass it through as-is rather than abort the
+    # checkout (which `required = true` would make fatal). The next stage re-encrypts via clean.
+    git::sops show "${INPUT}"
   elif (( decrypt_rc != 0 )); then
     echo >&2 "sops smudge filter: decryption failed for ${META[filePath]} (rc=${decrypt_rc}): ${err}"
     exit "${decrypt_rc}"
