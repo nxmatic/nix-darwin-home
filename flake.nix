@@ -1003,6 +1003,13 @@
             ndhStore = ndhStoreApi;
             nixBashTrampoline = ndhNixBashTrampoline;
           };
+          # The fork tailscale/tailscaled (CNAME extra_records + SSH port-2222)
+          # as a first-class packages output — systemPkgs already has
+          # tailscaleOverlay applied (see overlays/tailscale.nix), so this just
+          # re-exports the patched build. rke2lab's flox-catalogue consumes
+          # packages.aarch64-linux.tailscale so the in-cluster mesh tailscaled
+          # runs the fork, matching the operator host.
+          inherit (systemPkgs) tailscale;
           ${ndhBringupRuntimeAttr} = mkNdhBootstrapRuntimePackage system;
           ndh-disko-module-pinned = mkNdhDiskoPinnedModule system;
           ndh-disko-config = ndhStoreApi.writeText "zfs-disko-config.nix" (
