@@ -183,18 +183,23 @@ SCRIPT[name]="$( basename "$0" )"
 SCRIPT[dir]="$( dirname "$0" )"
 
 if [[ -L "${0}" ]]; then
-  # Do not run if no .sops.yaml in repository
-  test -r .sops.yaml || {
-    echo >&2 "You do not have configured sops for that repository. You're missing $(pwd)/.sops.yaml."
-    exit 1
-  }
-
   # Exit if the file names were not given
   test $# -ge 1
 
   OP=${SCRIPT[name]##*-}       # Extract operation from script name
   FORMAT=${SCRIPT[name]%%[-]*} # Extract format from script name
   FILE="$1"                    # First argument as file
+
+  # .sops.yaml (creation_rules) is needed only to ENCRYPT (clean). Decryption (smudge /
+  # textconv) reads the sops metadata embedded in the blob + the age key, so it does NOT need
+  # .sops.yaml — requiring it would make a checkout of any branch WITHOUT one fatally fail under
+  # `required = true`. So guard clean ONLY: a clean with no policy refuses (never commit
+  # plaintext); a smudge/textconv proceeds (decrypt by embedded metadata, or — for a plaintext
+  # blob — pass through).
+  if [[ "${OP}" == "clean" ]] && ! test -r .sops.yaml; then
+    echo >&2 "sops clean filter: missing $(pwd)/.sops.yaml — refusing to stage (would commit plaintext)."
+    exit 1
+  fi
 
   case "$OP" in
   "textconv")
