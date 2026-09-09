@@ -41,19 +41,24 @@ stdenvNoCC.mkDerivation {
   buildCommand = ''
     mkdir -p $out/sops.d
 
-    # The dispatcher, its @sopsConfigHome@ pointed at this output's sops.d.
-    substitute ${./sops.sh} $out/sops.sh --subst-var-by sopsConfigHome "$out/sops.d"
-    chmod +x $out/sops.sh
+    # The dispatcher, its @sopsConfigHome@ pointed at this output's sops.d. Installed as
+    # `sops-dispatch`, NOT `sops.sh`: the script self-identifies by basename — when the
+    # filter symlink re-execs `realpath $0`, a resolved name of `sops.sh` would trip its
+    # `sops::generate_config` branch (regenerate-config dev mode) instead of the smudge/
+    # clean path. The old inline derivation avoided this by chance (store file named
+    # `sops-script`); we make it explicit.
+    substitute ${./sops.sh} $out/sops-dispatch --subst-var-by sopsConfigHome "$out/sops.d"
+    chmod +x $out/sops-dispatch
 
     # Per-format git config fragments — filter/diff commands point at the scripts here.
     for fmt in ${lib.concatStringsSep " " formats}; do
       substitute ${./sops.d}/$fmt $out/sops.d/$fmt --subst-var-by sopsConfigHome "$out/sops.d"
     done
 
-    # One dispatcher symlink per (format, op) — sops.sh reads argv[0] for {format, op}.
+    # One dispatcher symlink per (format, op) — the dispatcher reads argv[0] for {fmt, op}.
     for fmt in ${lib.concatStringsSep " " formats}; do
       for op in ${lib.concatStringsSep " " filters}; do
-        ln -s $out/sops.sh $out/sops.d/$fmt-$op
+        ln -s $out/sops-dispatch $out/sops.d/$fmt-$op
       done
     done
 
