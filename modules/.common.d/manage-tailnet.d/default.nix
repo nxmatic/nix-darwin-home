@@ -15,6 +15,9 @@
 #   - `catalog.netplan.baremetal`   — subnet-router advertised CIDRs (ACL route
 #                                     auto-approvers)
 #   - `catalog.netplan.lan.cidr`    — the home LAN a LAN-fixed baremetal advertises
+#   - `catalog.netplan.segments`    — cluster segments; the "vmnet" /18 supernet is
+#                                     auto-approved for tag:k8s (operator Connector
+#                                     advertises each cluster's kube-vip VIP in it)
 #   - `ndhStore.installBinScript`   — the bash-trampoline bin wrapper
 #   - `nixBashTrampoline`           — the shared nix-managed bash + logger + env
 {
@@ -102,11 +105,28 @@ let
           [ catalog.netplan.lan.cidr ]
         else
           [ ];
+      # The cluster vmnet supernet (/18) the tailscale-operator's `controlplane`
+      # Connector advertises as a subnet route: every cluster's kube-vip VIP
+      # (10.80.<w>.10) and LB span live inside it, so the management cluster's
+      # CAPI reaches a workload apiserver THROUGH the tailnet (see rke2lab
+      # docs/architecture/cluster-api/management-workload-topology.adoc
+      # #cp-endpoint-reach).  Published by rke2lab's blueprint as the segment
+      # named "vmnet" (NetplanBlueprintScenario) — derived here, never hardcoded.
+      vmnetCidrs = map (s: s.cidr) (
+        builtins.filter (s: (s.name or "") == "vmnet") (catalog.netplan.segments or [ ])
+      );
       routeApprovers = builtins.listToAttrs (
-        map (cidr: {
+        (map (cidr: {
           name = cidr;
           value = [ (tg t.kind.nixos) ];
-        }) (baremetalCidrs ++ lanCidrs)
+        }) (baremetalCidrs ++ lanCidrs))
+        # vmnet routes are advertised by the operator's Connector device, which
+        # the operator stamps `tag:k8s` — NOT tag:nixos (the baremetal host subnet
+        # routers).  A different approver tag, so a separate mapping.
+        ++ (map (cidr: {
+          name = cidr;
+          value = [ (tg "k8s") ];
+        }) vmnetCidrs)
       );
     in
     {
@@ -130,10 +150,11 @@ let
         # Operator (console) hosts reach the whole fleet by role tag AND
         # the per-baremetal segments (vzhost.<domain> + the Incus instances
         # behind each subnet router) AND the fixed home LAN advertised by a
-        # LAN-fixed baremetal.  A tag'd node's netmap only carries a subnet
-        # route it is ACL-permitted to reach, so without these CIDRs a
-        # console host loses the segments/LAN it had as an untagged member
-        # (autogroup:members → *:*).
+        # LAN-fixed baremetal AND the cluster vmnet supernet (kube-vip VIPs /
+        # apiservers advertised by the operator Connector).  A tag'd node's
+        # netmap only carries a subnet route it is ACL-permitted to reach, so
+        # without these CIDRs a console host loses the segments/LAN/VIPs it had
+        # as an untagged member (autogroup:members → *:*).
         {
           action = "accept";
           src = [ (tg t.role.console) ];
@@ -141,7 +162,7 @@ let
             "${tg t.role.console}:*"
             "${tg t.role.headless}:*"
           ]
-          ++ map (cidr: "${cidr}:*") (baremetalCidrs ++ lanCidrs);
+          ++ map (cidr: "${cidr}:*") (baremetalCidrs ++ lanCidrs ++ vmnetCidrs);
         }
         {
           action = "accept";

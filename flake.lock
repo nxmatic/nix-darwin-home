@@ -103079,11 +103079,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788692069,
-        "narHash": "sha256-wTeq0IvYw9RHfSWox9Y0houQR+4in+Xo5D3n0lIU1oU=",
+        "lastModified": 1789129856,
+        "narHash": "sha256-QUJLF5NtSQvgL9yiJTFcNbB6F1QARuzLYIez7JQZ/pY=",
         "owner": "seedmatic",
         "repo": "flox-controller",
-        "rev": "b6ac4c2663a8ca7a64cb1d7d53aa9b8c2b808b03",
+        "rev": "ade09408924a3d94e5ff876bb6ecf31815c5bf72",
         "type": "github"
       },
       "original": {
@@ -103109,11 +103109,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788333265,
-        "narHash": "sha256-o9OZkLEFxLanB+mordeoR7hc46H2G+M1XgmHoZFpDQg=",
+        "lastModified": 1789073434,
+        "narHash": "sha256-jMafEbN+DzaXy5pyZqrdRNIBSMRxYObl/1rT5UgGJWE=",
         "owner": "seedmatic",
         "repo": "flox-nri-plugin",
-        "rev": "d9c1f071976e7b5909134e7fdd1dab7adb3c804b",
+        "rev": "b058dd26a7c83f2f4a8bb4707a7fdc23e99e05e0",
         "type": "github"
       },
       "original": {
@@ -282336,6 +282336,36 @@
         "type": "github"
       }
     },
+    "rke2-adoption-controller": {
+      "inputs": {
+        "flake-commons": [
+          "rke2lab",
+          "flake-commons"
+        ],
+        "flake-utils": [
+          "rke2lab",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "rke2lab",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789163436,
+        "narHash": "sha256-NZWW7SyUeIULpvAtEjf9TgDIE5hEAqYoIuP4ByqEnN0=",
+        "owner": "seedmatic",
+        "repo": "rke2lab",
+        "rev": "86b280c62e093bf1a03c3727a420dbf180fe963d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "seedmatic",
+        "ref": "rke2-adoption-controller",
+        "repo": "rke2lab",
+        "type": "github"
+      }
+    },
     "rke2lab": {
       "inputs": {
         "flake-commons": [
@@ -282359,6 +282389,7 @@
           "flake-commons",
           "nixpkgs"
         ],
+        "rke2-adoption-controller": "rke2-adoption-controller",
         "sops-nix": [
           "rke2lab",
           "flake-commons",
@@ -282366,11 +282397,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788947716,
-        "narHash": "sha256-scTtrQBpRkIs89d2N8SpmDRuczYfUcd3uYkPXe1aqKc=",
+        "lastModified": 1789166962,
+        "narHash": "sha256-WMiGRL3sqIcYT49jYf095Vb4R6iiFTWG5veGT+cXlUw=",
         "owner": "seedmatic",
         "repo": "rke2lab",
-        "rev": "bba3e4d9ad02289801d030f48598868f7898a2da",
+        "rev": "79142c2d3b4297a2896f71791febed9e37c626ad",
         "type": "github"
       },
       "original": {
